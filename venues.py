@@ -1,8 +1,19 @@
 import googlemaps
 
+# Replace 'XXX' with your actual API key
 API_KEY = 'XXX'
 
 def get_concert_venues(country_name, api_key):
+    """
+    Function to retrieve concert venues in a specified country using Google Maps API.
+
+    Parameters:
+    - country_name (str): Name of the country to search for concert venues.
+    - api_key (str): API key for Google Maps API.
+
+    Returns:
+    - None: Prints venue names and addresses.
+    """
     # Initialize the Google Maps client
     gmaps = googlemaps.Client(key=api_key)
 
@@ -22,6 +33,3 @@ def get_concert_venues(country_name, api_key):
             print(f"- {name}, located at {address}")
     else:
         print(f"No concert venues found in {country_name}.")
-
-
-
