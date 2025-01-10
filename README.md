@@ -23,6 +23,7 @@ This project helps manage music events by:
 
 1. Python 3.x
 2. Google Maps API Key
-3. pandas
-4. numpy
-5. requests
+3. Spotify API Key and Secrets
+4. pandas
+5. numpy
+6. requests
