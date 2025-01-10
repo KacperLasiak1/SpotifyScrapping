@@ -2,15 +2,23 @@ import connection as con
 import requests
 import pandas as pd
 
-
-#
 def fetch_playlist_tracks(playlist_id):
+    """
+    Function to fetch tracks from a Spotify playlist.
+    
+    Parameters:
+    - playlist_id (str): The ID of the Spotify playlist.
+
+    Returns:
+    - df (DataFrame): A pandas DataFrame containing playlist track details.
+    """
     url = f"{con.SPOTIFY_BASE_URL}/playlists/{playlist_id}/tracks"
     headers = {
         "Authorization": f"Bearer {con.ACCESS_TOKEN}"
     }
 
-    tracks = []
+    tracks = []  # List to store track details
+
     while url:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
@@ -35,15 +43,12 @@ def fetch_playlist_tracks(playlist_id):
         else:
             print("Error fetching playlist data:", response.json())
             break
+
     print("Fetching tracks from playlist...")
     if tracks:
         # Convert to DataFrame and save to a file
         df = pd.DataFrame(tracks)
-
         print("Playlist data saved.")
     else:
         print("No tracks found.")
     return df
-
-
-
