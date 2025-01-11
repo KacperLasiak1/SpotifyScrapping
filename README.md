@@ -27,3 +27,4 @@ This project helps manage music events by:
 4. pandas
 5. numpy
 6. requests
+7. Flask 3.1.0
