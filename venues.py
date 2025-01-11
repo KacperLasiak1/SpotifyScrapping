@@ -1,18 +1,23 @@
 import googlemaps
 
-# Replace 'XXX' with your actual API key
 API_KEY = 'XXX'
 
 def get_concert_venues(country_name, api_key):
     """
-    Function to retrieve concert venues in a specified country using Google Maps API.
+    Retrieves concert venues in a specified country using Google Maps API.
 
-    Parameters:
-    - country_name (str): Name of the country to search for concert venues.
-    - api_key (str): API key for Google Maps API.
+    This function initializes the Google Maps client with the provided API key,
+    searches for concert venues in the given country, and extracts their names and addresses.
+
+    Args:
+        country_name (str): The name of the country where concert venues are searched.
+        api_key (str): The Google Maps API key.
 
     Returns:
-    - None: Prints venue names and addresses.
+        list[dict]: A list of dictionaries containing venue names and addresses.
+
+    Example:
+        venues = get_concert_venues('United States', API_KEY)
     """
     # Initialize the Google Maps client
     gmaps = googlemaps.Client(key=api_key)
@@ -24,12 +29,14 @@ def get_concert_venues(country_name, api_key):
         region=country_name
     )
 
+    selected_venues = []
     # Extract and display venue names and addresses
     if places_result.get('results'):
-        print(f"Popular concert venues in {country_name}:")
         for venue in places_result['results']:
             name = venue.get('name', 'Unknown Name')
             address = venue.get('formatted_address', 'Unknown Address')
-            print(f"- {name}, located at {address}")
-    else:
-        print(f"No concert venues found in {country_name}.")
+            selected_venues.append({
+                'venue_name': name,
+                'venue_address': address
+            })
+    return selected_venues
