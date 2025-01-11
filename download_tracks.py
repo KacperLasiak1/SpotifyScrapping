@@ -4,21 +4,27 @@ import pandas as pd
 
 def fetch_playlist_tracks(playlist_id):
     """
-    Function to fetch tracks from a Spotify playlist.
-    
-    Parameters:
-    - playlist_id (str): The ID of the Spotify playlist.
+    Fetches tracks from a Spotify playlist given its playlist ID.
+
+    This function uses Spotify's API to retrieve detailed information about tracks
+    in a specified playlist. It handles pagination by iteratively fetching data until
+    all tracks are retrieved.
+
+    Args:
+        playlist_id (str): The Spotify playlist ID.
 
     Returns:
-    - df (DataFrame): A pandas DataFrame containing playlist track details.
+        pd.DataFrame: A pandas DataFrame containing details of each track in the playlist.
+
+    Example:
+        df = fetch_playlist_tracks('3u9PlY0zXI4pvQtJuv0OqJ')
     """
     url = f"{con.SPOTIFY_BASE_URL}/playlists/{playlist_id}/tracks"
     headers = {
         "Authorization": f"Bearer {con.ACCESS_TOKEN}"
     }
 
-    tracks = []  # List to store track details
-
+    tracks = []
     while url:
         response = requests.get(url, headers=headers)
         if response.status_code == 200:
@@ -43,7 +49,7 @@ def fetch_playlist_tracks(playlist_id):
         else:
             print("Error fetching playlist data:", response.json())
             break
-
+    
     print("Fetching tracks from playlist...")
     if tracks:
         # Convert to DataFrame and save to a file
@@ -51,4 +57,5 @@ def fetch_playlist_tracks(playlist_id):
         print("Playlist data saved.")
     else:
         print("No tracks found.")
+    
     return df
