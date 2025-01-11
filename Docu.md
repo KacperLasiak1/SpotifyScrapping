@@ -54,6 +54,7 @@ Oprogramowanie Music Event Planner jest objęte licencją **MIT**.
 | Git                 | System kontroli wersji          | Najnowsza         |
 | Pycharm             | Edytor kodu                     | Najnowsza         |
 | JSON                | Obsługa danych w formacie JSON  | Wbudowana w Python |
+| Flask | Podłoże wizualne | 3.1.0+ |
 
 ---
 
