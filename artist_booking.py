@@ -1,55 +1,56 @@
-def booking(artists):
+def booking(artists, budget, number_of_artists):
     """
-    Function to select a specified number of artists within a given budget.
-    
-    Parameters:
-    - artists (DataFrame): A DataFrame containing artist information with columns 'artist_name' and 'Total Price [$]'.
+    Selects artists for booking based on a given budget and the number of artists required.
+
+    The function sorts the input DataFrame of artists by their "Total Price [$]" in descending order.
+    It selects artists whose prices fit within the remaining budget until the desired number of artists
+    is reached or the list of available artists is exhausted. If the budget is insufficient to book
+    the required number of artists, a message is added to the result.
+
+    Args:
+        artists (pd.DataFrame): A pandas DataFrame containing artist data, including "Total Price [$]" and "artist_name".
+        budget (float): The total budget available for booking artists.
+        number_of_artists (int): The desired number of artists to book.
 
     Returns:
-    - selected_artists (list): A list of dictionaries with selected artist names and their corresponding total prices.
+        list[dict]: A list of dictionaries, each containing:
+            - 'artist_name' (str): The name of the artist.
+            - 'total_price' (int): The price of the artist.
+        If the budget is insufficient, a single dictionary with a message is returned.
+
+    Example:
+        Input:
+            artists = pd.DataFrame({
+                'artist_name': ['Artist A', 'Artist B', 'Artist C'],
+                'Total Price [$]': [1000, 2000, 1500]
+            })
+            budget = 2500
+            number_of_artists = 2
+
+        Output:
+            [
+                {'artist_name': 'Artist B', 'total_price': 2000},
+                {'artist_name': f"Your budget is too small to book 2 artists...", 'total_price': 0}
+            ]
     """
-
-    # Request budget from the user
-    budget = int(input("Specify your budget: "))
-
-    # Request the number of artists to be booked
-    number_of_artists = int(input("Specify number of artists: "))
-
-    # Sort artists by total price in descending order
     sorted_artists = artists.sort_values(by='Total Price [$]', ascending=False)
-
-    selected_artists = []  # List to store selected artists
-    remaining_budget = budget  # Remaining budget after selecting artists
+    selected_artists = []
+    remaining_budget = budget
 
     while len(selected_artists) < number_of_artists and not sorted_artists.empty:
-        # Check if the top artist can be booked within the remaining budget
         if sorted_artists.iloc[0]['Total Price [$]'] <= remaining_budget:
-            # Add artist to selected list
             selected_artists.append({
                 'artist_name': sorted_artists.iloc[0]['artist_name'],
                 'total_price': int(sorted_artists.iloc[0]['Total Price [$]'])
             })
-            # Update the remaining budget
             remaining_budget -= sorted_artists.iloc[0]['Total Price [$]']
-            # Remove the selected artist from the sorted list
             sorted_artists = sorted_artists.drop(sorted_artists.index[0])
         else:
-            # If the artist exceeds budget, remove them
             sorted_artists = sorted_artists.drop(sorted_artists.index[0])
 
-        # Break the loop if no artists are left to select
         if sorted_artists.empty:
-            print(f"Your budget is too small to book {number_of_artists} artists...")
-            selected_artists.clear()
+            selected_artists.append({'artist_name': f"Your budget is too small to book {number_of_artists} artists...",
+                                     'total_price': 0})
             break
-
-        # Check if the required number of artists has been selected
-        if len(selected_artists) == number_of_artists:
-            # Calculate the total price of selected artists
-            total_price = sum(artist['total_price'] for artist in selected_artists)
-            print("Selected artists:")
-            for artist in selected_artists:
-                print(f"Artist Name: {artist['artist_name']}, Total Price: {artist['total_price']}")
-            print(f"Total Price of Selected Artists: {total_price}")
 
     return selected_artists
